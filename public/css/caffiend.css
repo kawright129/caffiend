@@ -1,0 +1,117 @@
+html, 
+body {
+    height: 100%;
+}
+
+#app {
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+#app::before {
+    content: ' ';
+    position: fixed; 
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: url('/images/pines_bg.svg') no-repeat center center;
+    background-size: cover;
+    will-change: transform; 
+    z-index: -1;
+}
+
+body {
+    --text-color: #222;
+    --bkg-color: white;
+    --dmt-color: #555555;
+}
+
+body.dark-theme {
+    --text-color: #eee;
+    --bkg-color: #343434;
+    --dmt-color: white;
+}
+
+@media (prefers-color-scheme: light) {
+    body {
+        --text-color: #222;
+        --bkg-color: white;
+        --dmt-color: #555555;
+    }
+
+    body.dark-theme {
+        --text-color: #eee;
+        --bkg-color: #343434;
+        --dmt-color: white;
+    }
+}
+
+body {
+    background: var(--bkg-color);
+    width: 100%;
+    height: 100%;
+}
+
+.navbar{
+    border: 1px solid #eee;
+}
+
+#drinks .card, .navbar {
+    color: var(--text-color);
+    background-color: var(--bkg-color);
+}
+
+.page-header, .navbar-brand {
+    color: var(--text-color);
+}
+
+#toggleDarkMode {
+    color: var(--dmt-color);
+    font-size: 2vh;
+}
+
+.drink-image {
+    max-height: 235px;
+}
+
+.btn-add-drink, .btn-remove-drink {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    display: table;
+    transition: opacity .3s ease;
+}
+  
+.modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+
+/*----------------------- Transitions ------------------------*/
+
+.right-slide-leave-active,
+.right-slide-enter-active {
+  transition: .5s;
+}
+
+.right-slide-enter {
+  transform: translate(100%, 0);
+}
+
+.right-slide-leave-to {
+  transform: translate(-100%, 0);
+}
