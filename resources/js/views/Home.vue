@@ -36,8 +36,8 @@
                         :safe_caffeine_limit="safe_caffeine_limit"
                         :drinks_consumed="user.drinks_consumed"
                         v-show="shouldShowDrink(drink.name)"
-                        v-on:RemoveDrink="regurgitateDrink" 
-                        v-on:AddDrink="consumeDrink">
+                        v-on:removeDrink="regurgitateDrink" 
+                        v-on:addDrink="consumeDrink">
                     </drink-card>
                 </div>
             </transition>
@@ -84,7 +84,7 @@
 
         mounted() {
             if (localStorage.user) { 
-                let data = JSON.parse( localStorage.user )
+                let data = JSON.parse(localStorage.user)
                 if(data.hasOwnProperty('date') && data.date == this.getDate()) {
                     if(data.hasOwnProperty('data')) {
                         this.user = data.data
@@ -112,6 +112,7 @@
                     if(response.data.length == 0) {
                         this.show_no_results_card = true
                     } else {
+                        this.show_no_results_card = false
                         this.drinks.forEach((drink) => {
                             this.searched_drinks.push(drink.name)
                         })

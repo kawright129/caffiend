@@ -10,11 +10,11 @@
                         <label>Quantity Consumed Today:</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary btn-add-drink" type="button" @click="RemoveDrink(drink)" :disabled="drinks_consumed[drink.id] <= 0">-</button>
+                                <button class="btn btn-outline-primary btn-add-drink" type="button" @click="removeDrink(drink)" :disabled="drinks_consumed[drink.id] <= 0">-</button>
                             </div>
                             <input type="number" class="form-control" min="0" :value="drinks_consumed[drink.id]" style="text-align: center;" readonly>
                             <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-remove-drink" type="button" @click="AddDrink(drink)">+</button>
+                                <button class="btn btn-outline-primary btn-remove-drink" type="button" @click="addDrink(drink)">+</button>
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
         },
 
         mounted() {
-            this.num_can_safely_consume = this.drink.caffeine_content > 0 ? Math.floor( this.safe_caffeine_limit / this.drink.caffeine_content ) : 0
+            this.calcSafeConsumeNum(this.caffeine_consumed)
             this.drinks_consumed[this.drink.id] = this.drinks_consumed.hasOwnProperty(this.drink.id) ? this.drinks_consumed[this.drink.id] : 0
         },
 
@@ -54,26 +54,35 @@
             caffeine_consumed: {
                 deep: true,
                 handler: function(new_caffeine_consumed_value) {
-                    if(this.drink.caffeine_content > 0) {
-                        let updated_safe_consume_amt = Math.floor( (this.safe_caffeine_limit - new_caffeine_consumed_value) / this.drink.caffeine_content )
-                        this.num_can_safely_consume = updated_safe_consume_amt <= 0 ? 0 : updated_safe_consume_amt
-                    }
+                    this.calcSafeConsumeNum(new_caffeine_consumed_value)
                 }
             }
 
         },
 
         methods: {
-            AddDrink: function (drink) {
+            addDrink: function (drink) {
                 this.drinks_consumed[this.drink.id]++
-                this.$emit('AddDrink', drink);
+                this.$emit('addDrink', drink);
             },
-            RemoveDrink: function (drink) {
+
+            removeDrink: function (drink) {
                 if(this.drinks_consumed[this.drink.id] > 0) {
                     this.drinks_consumed[this.drink.id]--
                 }
-                this.$emit('RemoveDrink', drink);
+                this.$emit('removeDrink', drink);
             },
+
+            calcSafeConsumeNum: function (caffeine_consumed = 0) {
+                if(caffeine_consumed == 0) {
+                    this.num_can_safely_consume = this.drink.caffeine_content > 0 ? Math.floor( this.safe_caffeine_limit / this.drink.caffeine_content ) : 0
+                } else {
+                    if(this.drink.caffeine_content > 0) {
+                        let updated_safe_consume_amt = Math.floor( (this.safe_caffeine_limit - caffeine_consumed) / this.drink.caffeine_content )
+                        this.num_can_safely_consume = updated_safe_consume_amt <= 0 ? 0 : updated_safe_consume_amt
+                    }
+                }
+            }
         }
     }
 </script>
